@@ -7,8 +7,10 @@ game.PlayScreen = me.ScreenObject.extend({
 		game.data.score = 0;
 		/*this loads our level*/
 		me.levelDirector.loadLevel("level01");
-		var player = me.pool.pull("player", 0, 420, {});
-		me.game.world.addChild(player, 5);
+
+		var player = me.pool.pull("player", 0, 420, {}); /*defines what player is and where it will spawn*/
+
+		me.game.world.addChild(player, 5); /*spawns the player */
 
 		// add our HUD to the game world
 		this.HUD = new game.HUD.Container();
