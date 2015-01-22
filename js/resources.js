@@ -8,6 +8,9 @@ game.resources = [
 	 /*loads the titles*/
 	 {name: "background-tiles", type:"image", src: "data/img/background-tiles.png"},
 	 {name: "meta-tiles", type:"image", src: "data/img/meta-tiles.png"},
+	 /*loads the player img*/
+	 {name: "player", type:"image", src: "data/img/orcSpear.png"},
+	
 
 	/* Atlases 
 	 * @example
@@ -19,7 +22,7 @@ game.resources = [
 	 * {name: "example01", type: "tmx", src: "data/map/example01.tmx"},
 	 * {name: "example01", type: "tmx", src: "data/map/example01.json"},
  	 */
- 	 
+
  	 /*loads the map*/
  	 {name: "level01", type: "tmx", src: "data/map/test.tmx"},
 
