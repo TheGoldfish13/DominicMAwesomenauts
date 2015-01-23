@@ -11,7 +11,7 @@ game.PlayerEntity = me.Entity.extend({
 			}
 		}]);
 
-		this.body.setVelocity(5, 0);
+		this.body.setVelocity(5, 20); /*20 for the y value is essentially gravity so that the player falls*/
 
 
 	},
@@ -21,6 +21,11 @@ game.PlayerEntity = me.Entity.extend({
 			/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
 			/*me.timer.tick makes the movement look smooth*/
 			this.body.vel.x += this.body.accel.x * me.timer.tick;
+		}
+		else if(me.input.isKeyPressed("left")) { /*if the right arrow is being pushed then.....*/
+			/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
+			/*me.timer.tick makes the movement look smooth*/
+			this.body.vel.x -= this.body.accel.x * me.timer.tick;
 		}
 		else{ /*if its not being pushed then its not moving*/
 			this.body.vel.x = 0; 
