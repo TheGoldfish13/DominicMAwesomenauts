@@ -10,7 +10,11 @@ game.PlayScreen = me.ScreenObject.extend({
 
 		var player = me.pool.pull("player", 0, 420, {}); /*defines what player is and where it will spawn*/
 
-		me.game.world.addChild(player, 5); /*spawns the player */
+		me.game.world.addChild(player, 5); /*spawns the player*/
+
+		/*------Adding Controls------*/
+
+		me.input.bindKey(me.input.KEY.RIGHT, "right"); /*adds the control for right*/
 
 		// add our HUD to the game world
 		this.HUD = new game.HUD.Container();
