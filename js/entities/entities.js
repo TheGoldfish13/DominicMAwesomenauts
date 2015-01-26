@@ -13,6 +13,8 @@ game.PlayerEntity = me.Entity.extend({
 
 		this.body.setVelocity(5, 20); /*20 for the y value is essentially gravity so that the player falls*/
 
+		this.renderable.addAnimation("walk",
+		this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 122, 123, 124, 125], 80);
 
 	},
 
