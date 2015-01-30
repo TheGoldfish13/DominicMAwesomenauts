@@ -63,7 +63,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 			spritewidth: "100",
 			spriteheight: "100",
 			getShape: function() {
-				return (new me.Rect(0, 0, 100 100)).toPolygon();
+				return (new me.Rect(0, 0, 100, 100)).toPolygon();
 			}
 		}]);
 		this.broken = false; /*by default it isnt borken*/
@@ -72,13 +72,17 @@ game.PlayerBaseEntity = me.Entity.extend({
 		this.body.onCollision = this.onCollision.bind(this);
 
 		this.type = "PlayerBaseEntity";
+
+		this.renderable.addAnimation("idle", [0]);
+		this.renderable.addAnimation("broken", [1]);
+		this.renderable.setCurrentAnimation("idle");
 	},
 
-	update:function() { /*keep checking if*/
+	update:function(delta) { /*keep checking if*/
 		if(this.health<=0) { /*the health<=0 then the tower is broken*/
 			this.broken = true;
 		}
-		this.body.update(delta);
+		this.body.update(delta); /*time since last update*/
 
 		this._super(me.Entity, "update", [delta]);
 		return true;
@@ -101,7 +105,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 			spritewidth: "100",
 			spriteheight: "100",
 			getShape: function() {
-				return (new me.Rect(0, 0, 100 100)).toPolygon();
+				return (new me.Rect(0, 0, 100, 100)).toPolygon();
 			}
 		}]);
 		this.broken = false;
@@ -112,7 +116,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 		this.type = "EnemyBaseEntity";
 	},
 
-	update:function() {
+	update:function(delta) {
 		if(this.health<=0) {
 			this.broken = true;
 		}
