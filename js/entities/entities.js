@@ -13,7 +13,7 @@ game.PlayerEntity = me.Entity.extend({
 
 		this.body.setVelocity(5, 20); /*20 for the y value is essentially gravity so that the player falls*/
 
-		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); /*makes the camerafollow the player*/
 
 		this.renderable.addAnimation("idle", [78]); /*adds the animation for idle*/
 		this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 122, 123, 124, 125], 80);/*and for walk*/
@@ -75,15 +75,15 @@ game.PlayerBaseEntity = me.Entity.extend({
 
 		this.type = "PlayerBaseEntity";
 
-		this.renderable.addAnimation("idle", [0]);
+		this.renderable.addAnimation("idle", [0]); /*adds animations for normal and broken towers*/
 		this.renderable.addAnimation("broken", [1]);
-		this.renderable.setCurrentAnimation("idle");
+		this.renderable.setCurrentAnimation("idle"); /*sets the normal animation to idle*/
 	},
 
 	update:function(delta) { /*keep checking if*/
 		if(this.health<=0) { /*the health<=0 then the tower is broken*/
-			this.broken = true;
-			this.renderable.setCurrentAnimation("broken");
+			this.broken = true; /*if so, then set it to broken*/
+			this.renderable.setCurrentAnimation("broken");  /*and use the broken animation*/
 		}
 		this.body.update(delta); /*time since last update*/
 
@@ -123,12 +123,12 @@ game.EnemyBaseEntity = me.Entity.extend({
 		this.renderable.setCurrentAnimation("idle");
 	},
 
-	update:function(delta) {
-		if(this.health<=0) {
-			this.broken = true;
-			this.renderable.setCurrentAnimation("broken");
+	update:function(delta) { /*keep checking if*/
+		if(this.health<=0) { /*the health<=0 then the tower is broken*/
+			this.broken = true; /*if so, then set it to broken*/
+			this.renderable.setCurrentAnimation("broken");  /*and use the broken animation*/
 		}
-		this.body.update(delta);
+		this.body.update(delta); /*time since last update*/
 
 		this._super(me.Entity, "update", [delta]);
 		return true;
