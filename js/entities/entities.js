@@ -13,6 +13,8 @@ game.PlayerEntity = me.Entity.extend({
 
 		this.body.setVelocity(5, 20); /*20 for the y value is essentially gravity so that the player falls*/
 
+		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
+
 		this.renderable.addAnimation("idle", [78]); /*adds the animation for idle*/
 		this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 122, 123, 124, 125], 80);/*and for walk*/
 
@@ -81,6 +83,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 	update:function(delta) { /*keep checking if*/
 		if(this.health<=0) { /*the health<=0 then the tower is broken*/
 			this.broken = true;
+			this.renderable.setCurrentAnimation("broken");
 		}
 		this.body.update(delta); /*time since last update*/
 
@@ -114,11 +117,16 @@ game.EnemyBaseEntity = me.Entity.extend({
 		this.body.onCollision = this.onCollision.bind(this);
 
 		this.type = "EnemyBaseEntity";
+
+		this.renderable.addAnimation("idle", [0]);
+		this.renderable.addAnimation("broken", [1]);
+		this.renderable.setCurrentAnimation("idle");
 	},
 
 	update:function(delta) {
 		if(this.health<=0) {
 			this.broken = true;
+			this.renderable.setCurrentAnimation("broken");
 		}
 		this.body.update(delta);
 
