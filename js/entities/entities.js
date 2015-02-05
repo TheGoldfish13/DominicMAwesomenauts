@@ -17,6 +17,7 @@ game.PlayerEntity = me.Entity.extend({
 
 		this.renderable.addAnimation("idle", [78]); /*adds the animation for idle*/
 		this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 122, 123, 124, 125], 80);/*and for walk*/
+		this.renderable.addAnimation("attack", [65, 66, 67, 68, 69, 70, 71, 72], 80); /*as wellas for attack*/
 
 		this.renderable.setCurrentAnimation("idle"); /*by default set the animation for idle*/
 
@@ -38,14 +39,26 @@ game.PlayerEntity = me.Entity.extend({
 		else{ /*if its not being pushed then its not moving*/
 			this.body.vel.x = 0; 
 		}
-		if(this.body.vel.x !== 0) { /*if the velocity doesnt equal 0*/
+
+
+		if(me.input.isKeyPressed("attack")) { /*if attack key (space) is being pressed then*/
+			if(!this.renderable.isCurrentAnimation("attack")) { /*check if attack is not being pressed*/
+				this.renderable.setCurrentAnimation("attack", "idle") /*if so then set animation to attack and then set it to idle*/
+				this.renderable.setAnimationFrame();
+				/*makes it so that when the animation plays again it starts from the very beggining*/ 
+			} 
+
+		}	
+
+
+		else if(this.body.vel.x !== 0) { /*if the velocity doesnt equal 0*/
 			if(!this.renderable.isCurrentAnimation("walk")) { /*and if the animation is currently not "walk"*/
 				this.renderable.setCurrentAnimation("walk"); /* then set it to walk*/
 			}
 		}
 		else {
-			this.renderable.setCurrentAnimation("idle"); /*otherwise*/
-			}
+			this.renderable.setCurrentAnimation("idle"); /*otherwise set animation to idle*/
+		}
 
 
 
