@@ -12,6 +12,7 @@ game.PlayerEntity = me.Entity.extend({
 		}]);
 
 		this.body.setVelocity(5, 20); /*20 for the y value is essentially gravity so that the player falls*/
+		this.facing = "right"; /*keeps track of direction of character*/
 
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); /*makes the camerafollow the player*/
 
@@ -28,20 +29,22 @@ game.PlayerEntity = me.Entity.extend({
 			/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
 			/*me.timer.tick makes the movement look smooth*/
 			this.body.vel.x += this.body.accel.x * me.timer.tick;
+			this.facing = "right";
 			this.flipX(true);
 		}
 		else if(me.input.isKeyPressed("left")) { /*if the right arrow is being pushed then.....*/
 			/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
 			/*me.timer.tick makes the movement look smooth*/
 			this.body.vel.x -= this.body.accel.x * me.timer.tick;
+			this.facing ="left";
 			this.flipX(false);
 		}
 		else{ /*if its not being pushed then its not moving*/
 			this.body.vel.x = 0; 
 		}
 
-		if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling) { /*if jump is pressed, and player isnt jumping or falling*/
-			this.jumping = true; /*set jumping equal to true*/
+		if(me.input.isKeyPressed("jump") && !this.body.jumping && !this.body.falling) { /*if jump is pressed, and player isnt jumping or falling*/
+			this.body.jumping = true; /*set jumping equal to true*/
 			this.body.vel.y -= this.body.accel.y * me.timer.tick; /*formula saying y-velocity= y-accel * time*/
 		}
 
@@ -66,11 +69,27 @@ game.PlayerEntity = me.Entity.extend({
 		}
 
 
-
+		me.collision.check(this, true, this.collideHandler.bind(this), true); /*passing parameter tha is checking for thecollision and whatever its running in to*/
 		this.body.update(delta); /*delta is the change in time*/
 		
 		this._super(me.Entity, "update", [delta]);
 		return true;
+	},
+
+	collideHandler: function(response) {
+		if(response.b.type ==='EnemyBaseEntity'){
+			var ydif = this.pos.y - response.b.pos.y;
+			var xdif = this.pos.x - response.b.pos.x;
+
+			if(xdif > -35 && this.facing === 'right' && (xdif<0)) {
+				this.body.vel.x = 0;
+				this.pos.x = this.pos.x - 1;
+			}
+			else if(xdif<70 && this.facing === 'left' && (xdif>0)) {
+				this.body.vel.x = 0;
+				this.pos.x = this.pos.x + 1;
+			}
+		}
 	}
 });
 /*Player base*/
