@@ -40,9 +40,9 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.vel.x = 0; 
 		}
 
-		if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling) {
-			this.jumping = true;
-			this.body.vel.y -= this.body.accel.y * me.timer.tick;
+		if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling) { /*if jump is pressed, and player isnt jumping or falling*/
+			this.jumping = true; /*set jumping equal to true*/
+			this.body.vel.y -= this.body.accel.y * me.timer.tick; /*formula saying y-velocity= y-accel * time*/
 		}
 
 
