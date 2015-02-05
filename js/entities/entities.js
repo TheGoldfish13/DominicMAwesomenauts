@@ -40,6 +40,11 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.vel.x = 0; 
 		}
 
+		if(me.input.isKeyPressed("jump") && !this.jumping && !this.falling) {
+			this.jumping = true;
+			this.body.vel.y -= this.body.accel.y * me.timer.tick;
+		}
+
 
 		if(me.input.isKeyPressed("attack")) { /*if attack key (space) is being pressed then*/
 			if(!this.renderable.isCurrentAnimation("attack")) { /*check if attack is not being pressed*/
@@ -78,7 +83,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 			spritewidth: "100",
 			spriteheight: "100",
 			getShape: function() {
-				return (new me.Rect(0, 0, 100, 100)).toPolygon();
+				return (new me.Rect(0, 0, 100, 72)).toPolygon();
 			}
 		}]);
 		this.broken = false; /*by default it isnt borken*/
@@ -121,7 +126,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 			spritewidth: "100",
 			spriteheight: "100",
 			getShape: function() {
-				return (new me.Rect(0, 0, 100, 100)).toPolygon();
+				return (new me.Rect(0, 0, 100,72)).toPolygon();
 			}
 		}]);
 		this.broken = false;
