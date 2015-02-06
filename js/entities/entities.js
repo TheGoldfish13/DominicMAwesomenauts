@@ -48,8 +48,8 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.vel.y -= this.body.accel.y * me.timer.tick; /*formula saying y-velocity= y-accel * time*/
 		}
 
-
-		if(me.input.isKeyPressed("attack")) { /*if attack key (space) is being pressed then*/
+		/*I made it so you cant attack while in the air*/
+		if(me.input.isKeyPressed("attack") && !this.body.jumping && !this.body.falling){ /*if attack key (space) is being pressed then*/
 			if(!this.renderable.isCurrentAnimation("attack")) { /*check if attack is not being pressed*/
 				this.renderable.setCurrentAnimation("attack", "idle") /*if so then set animation to attack and then set it to idle*/
 				this.renderable.setAnimationFrame();
@@ -66,6 +66,10 @@ game.PlayerEntity = me.Entity.extend({
 		}
 		else if(!this.renderable.isCurrentAnimation("attack")) {
 			this.renderable.setCurrentAnimation("idle"); /*otherwise set animation to idle*/
+		}
+
+		if(this.renderable.isCurrentAnimation("attack"))  { /*I made it so that you cant move while attacking*/
+			this.body.vel.x = 0; /*if you're attacking your x velocity is 0*/
 		}
 
 
