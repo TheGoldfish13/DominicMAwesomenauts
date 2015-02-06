@@ -103,9 +103,9 @@ game.PlayerEntity = me.Entity.extend({
 				this.pos.x = this.pos.x + 1;
 			}
 
-			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000) {
-				this.lastHit = this.now;
-				response.b.loseHealth();
+			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000) { /*if attacking*/
+				this.lastHit = this.now; /*makes it so it will only lose health once per one attack*/
+				response.b.loseHealth(); /*tower will lose health*/
 			}
 		}
 	}
@@ -194,6 +194,6 @@ game.EnemyBaseEntity = me.Entity.extend({
 	}, 
 
 	loseHealth: function() {
-		this.health--;
+		this.health--; /*subracts one from health*/
 	}
 });
