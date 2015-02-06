@@ -12,6 +12,9 @@ game.PlayScreen = me.ScreenObject.extend({
 
 		me.game.world.addChild(player, 5); /*spawns the player*/
 
+		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
+		me.game.game.world.addChild(player, 5);
+
 		/*------Adding Controls------*/
 
 		me.input.bindKey(me.input.KEY.RIGHT, "right"); /*adds the control for right*/
