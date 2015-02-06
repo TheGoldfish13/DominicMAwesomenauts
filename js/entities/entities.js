@@ -198,7 +198,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 	}
 });
 
-game.EnemyCreep = me.Entity.extend{(
+game.EnemyCreep = me.Entity.extend({
 	init: function(x, y, settings) { /*initializing what enemy creep is*/ 
 		this._super(me.Entity, [x, y, {
 			image: "creep1", /*uses this img*/
@@ -226,4 +226,4 @@ game.EnemyCreep = me.Entity.extend{(
 
 	}
 
-)};
+});
