@@ -81,11 +81,16 @@ game.PlayerEntity = me.Entity.extend({
 			var ydif = this.pos.y - response.b.pos.y; /*sets variable equal to y-pos - responce.b.y-pos*/
 			var xdif = this.pos.x - response.b.pos.x; /*sets variable equal to x-pos - responce.b.x-pos*/
 
+			if(ydif< -40 && xdif< 70 && xdif >-35 && ydif>-50) {
+				this.body.falling = false;
+				this.body.vel.y = -1;
+			}
+
 			if(xdif > -35 && this.facing === 'right' && (xdif<0)) { /*if you're facing right and xdif>-35*/
 				this.body.vel.x = 0; /*set velocity = 0*/
 				this.pos.x = this.pos.x - 1; /*set position to itself minus 1*/
 			}
-			else if(xdif<70 && this.facing === 'left' && (xdif>0)) { /*same thing except inversely for left */
+			else if(xdif<70 && this.facing === 'left' && (xdif>0)) { /*same thing except inversely for left*/
 				this.body.vel.x = 0; 
 				this.pos.x = this.pos.x + 1;
 			}
