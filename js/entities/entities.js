@@ -59,12 +59,12 @@ game.PlayerEntity = me.Entity.extend({
 		}	
 
 
-		else if(this.body.vel.x !== 0) { /*if the velocity doesnt equal 0*/
+		else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) { /*if the velocity doesnt equal 0*/
 			if(!this.renderable.isCurrentAnimation("walk")) { /*and if the animation is currently not "walk"*/
 				this.renderable.setCurrentAnimation("walk"); /* then set it to walk*/
 			}
 		}
-		else {
+		else if(!this.renderable.isCurrentAnimation("attack")) {
 			this.renderable.setCurrentAnimation("idle"); /*otherwise set animation to idle*/
 		}
 
@@ -81,9 +81,9 @@ game.PlayerEntity = me.Entity.extend({
 			var ydif = this.pos.y - response.b.pos.y; /*sets variable equal to y-pos - responce.b.y-pos*/
 			var xdif = this.pos.x - response.b.pos.x; /*sets variable equal to x-pos - responce.b.x-pos*/
 
-			if(ydif< -40 && xdif< 70 && xdif >-35 && ydif>-50) {
-				this.body.falling = false;
-				this.body.vel.y = -1;
+			if(ydif< -40 && xdif< 70 && xdif >-35 && ydif>-50) { /*if you're in the location of the upper hitbox*/
+				this.body.falling = false; /*you're no longer falling*/
+				this.body.vel.y = -1; /*and your y velocity is -1*/
 			}
 
 			if(xdif > -35 && this.facing === 'right' && (xdif<0)) { /*if you're facing right and xdif>-35*/
