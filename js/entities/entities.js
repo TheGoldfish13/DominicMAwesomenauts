@@ -197,3 +197,30 @@ game.EnemyBaseEntity = me.Entity.extend({
 		this.health--; /*subracts one from health*/
 	}
 });
+
+game.EnemyCreep = me.Entity.extend{(
+	init: function(x, y, settings) { /*initializing what enemy creep is*/ 
+		this._super(me.Entity, [x, y, {
+			image: "creep1", /*uses this img*/
+			width: 32, /*32 wide*/
+			height: 64, /*64 tall*/
+			spritewidth: "32",
+			spriteheight: "64",
+			getShape: function() {
+				return (new me.Rect(0, 0, 32, 64)).toPolygon(); /*is a rectangle with these specs*/
+			}
+		}]);
+		this.health = 10; /*has 10 health*/
+		this.alwaysUpdate = true; /*always updates even if its not on screen*/
+
+		this.setVelocity(3, 20);
+
+		this.type = "EnemyCreep";
+	},
+
+	update: function() {
+
+
+	}
+
+)};
