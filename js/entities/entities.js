@@ -13,6 +13,9 @@ game.PlayerEntity = me.Entity.extend({
 
 		this.body.setVelocity(5, 20); /*20 for the y value is essentially gravity so that the player falls*/
 		this.facing = "right"; /*keeps track of direction of character*/
+		this.now = new Date().getTime();
+		this.lastHit = this.now;
+		this.lastAttack = new Date().getTime();
 
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); /*makes the camerafollow the player*/
 
@@ -25,6 +28,7 @@ game.PlayerEntity = me.Entity.extend({
 	},
 
 	update: function(delta){
+		this.now = new Date().getTime();
 		if(me.input.isKeyPressed("right")) { /*if the right arrow is being pushed then.....*/
 			/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
 			/*me.timer.tick makes the movement look smooth*/
@@ -97,6 +101,11 @@ game.PlayerEntity = me.Entity.extend({
 			else if(xdif<70 && this.facing === 'left' && (xdif>0)) { /*same thing except inversely for left*/
 				this.body.vel.x = 0; 
 				this.pos.x = this.pos.x + 1;
+			}
+
+			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000) {
+				this.lastHit = this.now;
+				response.b.loseHealth();
 			}
 		}
 	}
@@ -182,6 +191,9 @@ game.EnemyBaseEntity = me.Entity.extend({
 
 	onCollision: function() {
 		
-	} 
+	}, 
 
+	loseHealth: function() {
+		this.health--;
+	}
 });
