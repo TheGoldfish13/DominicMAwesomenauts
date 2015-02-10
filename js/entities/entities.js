@@ -213,19 +213,18 @@ game.EnemyCreep = me.Entity.extend({
 
 		this.body.setVelocity(3, 20);
 
-		this.type = "EnemyCreep";
+		this.type = "EnemyCreep"; 
 
-		this.renderable.addAnimation("walk", [3,4,5], 80);
-		this.renderable.setCurrentAnimation("walk");
+		this.renderable.addAnimation("walk", [3,4,5], 80); /*adds animation for walking*/
+		this.renderable.setCurrentAnimation("walk"); /*sets animation to walk*/
 	},
 
-	update: function() {
-		this.now = new Date().getTime();
-		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) {
-			this.lastCreep = this.now;
-			var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
-			me.game.world.addChild(creepe, 5);
-		}
+	update: function(delta) {
+		this.body.vel.x -= this.body.accel.x * me.timer.tick; /*makes creep walk to the left*/
+
+		this.body.update(delta); /*time since last update*/
+
+		this._super(me.Entity, "update", [delta]); 
 
 		return true;
 	}
@@ -242,10 +241,10 @@ game.GameManager = Object.extend({
 	update: function() {
 		this.now = new Date().getTime();
 
-		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) {
+		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 1 second*/
 			this.lastCreep = this.now;
-			var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
-			me.game.world.addChild(creepe, 5);
+			var creepe = me.pool.pull("EnemyCreep", 1000, 0, {}); /*define what creep is*/
+			me.game.world.addChild(creepe, 5); /*and spawn one*/
 		}
 		return true;
 	}
