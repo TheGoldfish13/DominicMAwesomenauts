@@ -47,7 +47,7 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.vel.x = 0; 
 		}
 
-		if(me.input.isKeyPressed("jump") && !this.body.jumping && !this.body.falling) { /*if jump is pressed, and player isnt jumping or falling*/
+		if(me.input.isKeyPressed("jump") && !this.body.jumping && !this.body.falling && !this.renderable.isCurrentAnimation("attack")) { /*if jump is pressed, and player isnt jumping or falling*/
 			this.body.jumping = true; /*set jumping equal to true*/
 			this.body.vel.y -= this.body.accel.y * me.timer.tick; /*formula saying y-velocity= y-accel * time*/
 		}
@@ -61,8 +61,6 @@ game.PlayerEntity = me.Entity.extend({
 			} 
 
 		}	
-
-
 		else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) { /*if the velocity doesnt equal 0*/
 			if(!this.renderable.isCurrentAnimation("walk")) { /*and if the animation is currently not "walk"*/
 				this.renderable.setCurrentAnimation("walk"); /* then set it to walk*/
@@ -200,7 +198,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 
 game.EnemyCreep = me.Entity.extend({
 	init: function(x, y, settings) { /*initializing what enemy creep is*/ 
-		this._super(me.Entity, [x, y, {
+		this._super(me.Entity, 'init', [x, y, {
 			image: "creep1", /*uses this img*/
 			width: 32, /*32 wide*/
 			height: 64, /*64 tall*/
@@ -213,7 +211,7 @@ game.EnemyCreep = me.Entity.extend({
 		this.health = 10; /*has 10 health*/
 		this.alwaysUpdate = true; /*always updates even if its not on screen*/
 
-		this.setVelocity(3, 20);
+		this.body.setVelocity(3, 20);
 
 		this.type = "EnemyCreep";
 
@@ -222,8 +220,33 @@ game.EnemyCreep = me.Entity.extend({
 	},
 
 	update: function() {
+		this.now = new Date().getTime();
+		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) {
+			this.lastCreep = this.now;
+			var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
+			me.game.world.addChild(creepe, 5);
+		}
 
-
+		return true;
 	}
 
+});
+game.GameManager = Object.extend({
+	init: function(x, y, settings) {
+		this.now = new Date().getTime();
+		this.lastCreep = new Date().getTime();
+
+		this.alwaysUpdate = true;
+	},
+
+	update: function() {
+		this.now = new Date().getTime();
+
+		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) {
+			this.lastCreep = this.now;
+			var creepe = me.pool.pull("EnemyCreep", 1000, 0, {});
+			me.game.world.addChild(creepe, 5);
+		}
+		return true;
+	}
 });

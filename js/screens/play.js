@@ -13,7 +13,7 @@ game.PlayScreen = me.ScreenObject.extend({
 		me.game.world.addChild(player, 5); /*spawns the player*/
 
 		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
-		me.game.game.world.addChild(player, 5);
+		me.game.world.addChild(gamemanager, 5);
 
 		/*------Adding Controls------*/
 
