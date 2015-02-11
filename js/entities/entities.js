@@ -126,7 +126,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 		this.alwaysUpdate = true; /*always update*/
 		this.body.onCollision = this.onCollision.bind(this);
 
-		this.type = "PlayerBaseEntity";
+		this.type = "PlayerBase";
 
 		this.renderable.addAnimation("idle", [0]); /*adds animations for normal and broken towers*/
 		this.renderable.addAnimation("broken", [1]);
@@ -142,6 +142,10 @@ game.PlayerBaseEntity = me.Entity.extend({
 
 		this._super(me.Entity, "update", [delta]);
 		return true;
+	},
+
+	loseHealth: function(damage) {
+		this.health = this.health - damage;
 	},
 
 	onCollision: function() {
@@ -210,7 +214,10 @@ game.EnemyCreep = me.Entity.extend({
 		}]);
 		this.health = 10; /*has 10 health*/
 		this.alwaysUpdate = true; /*always updates even if its not on screen*/
-
+		this.attacking = false; /*makes the enemy not attacking*/
+		this.lastAttacking = new Date().getTime(); /*keeps track of when our creeep last attacked anything*/
+		this.lastHit = new Date().getTime(); /*and when our creep last hit anything*/
+		this.now = new Date().getTime();
 		this.body.setVelocity(3, 20);
 
 		this.type = "EnemyCreep"; 
@@ -220,13 +227,29 @@ game.EnemyCreep = me.Entity.extend({
 	},
 
 	update: function(delta) {
+		this.now = new Date().getTime();
 		this.body.vel.x -= this.body.accel.x * me.timer.tick; /*makes creep walk to the left*/
+
+		me.collision.check(this, true, this.collideHandler.bind(this), true);
 
 		this.body.update(delta); /*time since last update*/
 
 		this._super(me.Entity, "update", [delta]); 
 
 		return true;
+	},
+
+	collideHandler: function(response) { 
+		if(response.b.type==='PlayerBase') { /*if colliding with player base*/
+			this.attacking=true; /*set attacking to true*/
+			//this.lastAttacking=this.now; 
+			this.body.vel.x = 0; /*make it sit still*/
+			this.pos.x = this.pos.x + 1; /*push it slightly to the right to maintain its position*/
+			if((this.now-this.lastHit >= 1000)) {/*and if the last attack was more than a second ago*/
+				this.lastHit = this.now; /*and reset it to now as the current timer*/
+				response.b.loseHealth(1); /*make player base lose 1 health*/
+			} 
+		}
 	}
 
 });
