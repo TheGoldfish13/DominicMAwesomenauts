@@ -10,7 +10,8 @@ game.PlayerEntity = me.Entity.extend({
 				return(new me.Rect(0, 0, 64, 64)).toPolygon(); /*essentialy sets its hitbox*/
 			}
 		}]);
-
+		this.type = "PlayerEntity"; /*you are a player entity*/
+		this.health = 20; /*and your health is 20*/
 		this.body.setVelocity(5, 20); /*20 for the y value is essentially gravity so that the player falls*/
 		this.facing = "right"; /*keeps track of direction of character*/
 		this.now = new Date().getTime();
@@ -80,6 +81,10 @@ game.PlayerEntity = me.Entity.extend({
 		
 		this._super(me.Entity, "update", [delta]);
 		return true;
+	},
+
+	loseHealth: function(damage) {
+		this.health = this.health - damage; /*current health is health minus howver much damage you took*/
 	},
 
 	collideHandler: function(response) {
@@ -250,6 +255,21 @@ game.EnemyCreep = me.Entity.extend({
 				response.b.loseHealth(1); /*make player base lose 1 health*/
 			} 
 		}
+
+		else if(response.b.type==='PlayerEntity') { /*if colliding with player*/
+			var xdif = this.pos.x - response.b.pos.x; /*xdif is used for position*/
+
+			this.attacking=true; /*set attacking to true*/
+			//this.lastAttacking=this.now; 
+			if(xdif>0) {
+				this.pos.x = this.pos.x + 1; /*push it slightly to the right to maintain its position*/	
+				this.body.vel.x = 0; /*make it sit still*/
+			}
+			if((this.now-this.lastHit >= 1000) && xdif>0) {/*and if the last attack was more than a second ago*/
+				this.lastHit = this.now; /*and reset it to now as the current timer*/
+				response.b.loseHealth(1); /*make player lose 1 health*/
+			} 
+		}	
 	}
 
 });
