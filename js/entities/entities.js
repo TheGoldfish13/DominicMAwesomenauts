@@ -97,7 +97,7 @@ game.PlayerEntity = me.Entity.extend({
 				this.body.vel.y = -1; /*and your y velocity is -1*/
 			}
 
-			if(xdif > -35 && this.facing === 'right' && (xdif<0)) { /*if you're facing right and xdif>-35*/
+			else if(xdif > -35 && this.facing === 'right' && (xdif<0)) { /*if you're facing right and xdif>-35*/
 				this.body.vel.x = 0; /*set velocity = 0*/
 				this.pos.x = this.pos.x - 1; /*set position to itself minus 1*/
 			}
@@ -106,11 +106,36 @@ game.PlayerEntity = me.Entity.extend({
 				this.pos.x = this.pos.x + 1;
 			}
 
-			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000) { /*if attacking*/
+			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000) { /*if attacking and you havent attacked in 1 second*/
 				this.lastHit = this.now; /*makes it so it will only lose health once per one attack*/
 				response.b.loseHealth(); /*tower will lose health*/
 			}
+			
 		}
+		else if(response.b.type === 'EnemyCreep') {
+			var xdif = this.pos.x - response.b.pos.x; /*making collision hitbox for x*/
+			var ydif = this.pos.y - response.b.pos.y; /*collision for y*/
+
+			if(xdif>0) { /*if xdif>0 (coming from the right)*/
+				this.pos.x = this.pos.x + 1; /*then push slighty to the right*/
+				if(this.facing==="left") { /*and if facing left*/
+					this.body.vel.x = 0; /*make velocity = 0*/
+				}
+			}
+			else{ /*if coming from left*/
+				this.pos.x = this.pos.x - 1; /*push slighty to left*/
+				if(this.facing==="right") { /*and if facing right*/
+					this.body.vel.x = 0; /*make velocity = 0*/
+				}
+			}
+
+				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000
+					 && (Math.abs(ydif <= 40)
+					 && ((xdif>0) && this.facing === "left") || ((xdif<0) && this.facing === "right"))) { /*if attacking and you havent attacked in 1 second*/
+					this.lastHit = this.now; /*updates timers*/
+					response.b.loseHealth(1); /*lose 1 health*/
+				}
+			}
 	}
 });
 /*Player base*/
@@ -217,7 +242,7 @@ game.EnemyCreep = me.Entity.extend({
 				return (new me.Rect(0, 0, 32, 64)).toPolygon(); /*is a rectangle with these specs*/
 			}
 		}]);
-		this.health = 10; /*has 10 health*/
+		this.health = 3; /*has 3 health*/
 		this.alwaysUpdate = true; /*always updates even if its not on screen*/
 		this.attacking = false; /*makes the enemy not attacking*/
 		this.lastAttacking = new Date().getTime(); /*keeps track of when our creeep last attacked anything*/
@@ -231,7 +256,15 @@ game.EnemyCreep = me.Entity.extend({
 		this.renderable.setCurrentAnimation("walk"); /*sets animation to walk*/
 	},
 
+	loseHealth: function(damage) {
+		this.health = this.health - damage; /*loses health based on damage*/
+	},
+
 	update: function(delta) {
+		if(this.health <= 0) {
+			me.game.world.removeChild(this);
+		}
+
 		this.now = new Date().getTime();
 		this.body.vel.x -= this.body.accel.x * me.timer.tick; /*makes creep walk to the left*/
 
