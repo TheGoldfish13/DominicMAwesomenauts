@@ -11,11 +11,12 @@ game.PlayerEntity = me.Entity.extend({
 			}
 		}]);
 		this.type = "PlayerEntity"; /*you are a player entity*/
-		this.health = 20; /*and your health is 20*/
-		this.body.setVelocity(5, 20); /*20 for the y value is essentially gravity so that the player falls*/
+		this.health = game.data.playerHealth; /*and your health is 20*/
+		this.body.setVelocity(game.data.playerMoveSpeed, 20); /*20 for the y value is essentially gravity so that the player falls*/
 		this.facing = "right"; /*keeps track of direction of character*/
 		this.now = new Date().getTime();
 		this.lastHit = this.now;
+		this.dead = false;
 		this.lastAttack = new Date().getTime();
 
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); /*makes the camerafollow the player*/
@@ -30,6 +31,16 @@ game.PlayerEntity = me.Entity.extend({
 
 	update: function(delta){
 		this.now = new Date().getTime();
+
+		if(this.health <= 0) {
+			this.dead = true;
+			//this.pos.x = 10;
+			this.pos.y = 0;
+			this.health = game.data.playerHealth;
+		}
+
+
+
 		if(me.input.isKeyPressed("right")) { /*if the right arrow is being pushed then.....*/
 			/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
 			/*me.timer.tick makes the movement look smooth*/
@@ -99,16 +110,16 @@ game.PlayerEntity = me.Entity.extend({
 
 			else if(xdif > -35 && this.facing === 'right' && (xdif<0)) { /*if you're facing right and xdif>-35*/
 				this.body.vel.x = 0; /*set velocity = 0*/
-				this.pos.x = this.pos.x - 1; /*set position to itself minus 1*/
+				//this.pos.x = this.pos.x - 1; /*set position to itself minus 1*/
 			}
 			else if(xdif<70 && this.facing === 'left' && (xdif>0)) { /*same thing except inversely for left*/
 				this.body.vel.x = 0; 
-				this.pos.x = this.pos.x + 1;
+				//this.pos.x = this.pos.x + 1;
 			}
 
-			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000) { /*if attacking and you havent attacked in 1 second*/
+			if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= game.data.playerAttackTimer) { /*if attacking and you havent attacked in 1 second*/
 				this.lastHit = this.now; /*makes it so it will only lose health once per one attack*/
-				response.b.loseHealth(); /*tower will lose health*/
+				response.b.loseHealth(game.data.playerAttack); /*tower will lose health*/
 			}
 			
 		}
@@ -117,23 +128,23 @@ game.PlayerEntity = me.Entity.extend({
 			var ydif = this.pos.y - response.b.pos.y; /*collision for y*/
 
 			if(xdif>0) { /*if xdif>0 (coming from the right)*/
-				this.pos.x = this.pos.x + 1; /*then push slighty to the right*/
+				//this.pos.x = this.pos.x + 1; /*then push slighty to the right*/
 				if(this.facing==="left") { /*and if facing left*/
 					this.body.vel.x = 0; /*make velocity = 0*/
 				}
 			}
 			else{ /*if coming from left*/
-				this.pos.x = this.pos.x - 1; /*push slighty to left*/
+				//this.pos.x = this.pos.x - 1; /*push slighty to left*/
 				if(this.facing==="right") { /*and if facing right*/
 					this.body.vel.x = 0; /*make velocity = 0*/
 				}
 			}
 
-				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= 1000
-					 && (Math.abs(ydif <= 40)
+				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= game.data.playerAttackTimer /*if attacking and havent attacked in a second*/
+					 && (Math.abs(ydif <= 40) /*and xdif<=40*/
 					 && ((xdif>0) && this.facing === "left") || ((xdif<0) && this.facing === "right"))) { /*if attacking and you havent attacked in 1 second*/
 					this.lastHit = this.now; /*updates timers*/
-					response.b.loseHealth(1); /*lose 1 health*/
+					response.b.loseHealth(game.data.playerAttack); /*lose 1 health*/
 				}
 			}
 	}
@@ -152,7 +163,7 @@ game.PlayerBaseEntity = me.Entity.extend({
 			}
 		}]);
 		this.broken = false; /*by default it isnt borken*/
-		this.health = 10; /*it has 10 health*/
+		this.health = game.data.playerBaseHealth; /*it has 10 health*/
 		this.alwaysUpdate = true; /*always update*/
 		this.body.onCollision = this.onCollision.bind(this);
 
@@ -199,7 +210,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 			}
 		}]);
 		this.broken = false;
-		this.health = 10;
+		this.health = game.data.enemyBaseHealth;
 		this.alwaysUpdate = true;
 		this.body.onCollision = this.onCollision.bind(this);
 
@@ -242,7 +253,7 @@ game.EnemyCreep = me.Entity.extend({
 				return (new me.Rect(0, 0, 32, 64)).toPolygon(); /*is a rectangle with these specs*/
 			}
 		}]);
-		this.health = 3; /*has 3 health*/
+		this.health = game.data.enemyCreepHealth; /*has 3 health*/
 		this.alwaysUpdate = true; /*always updates even if its not on screen*/
 		this.attacking = false; /*makes the enemy not attacking*/
 		this.lastAttacking = new Date().getTime(); /*keeps track of when our creeep last attacked anything*/
@@ -282,10 +293,10 @@ game.EnemyCreep = me.Entity.extend({
 			this.attacking=true; /*set attacking to true*/
 			//this.lastAttacking=this.now; 
 			this.body.vel.x = 0; /*make it sit still*/
-			this.pos.x = this.pos.x + 1; /*push it slightly to the right to maintain its position*/
+			//this.pos.x = this.pos.x + 1; /*push it slightly to the right to maintain its position*/
 			if((this.now-this.lastHit >= 1000)) {/*and if the last attack was more than a second ago*/
 				this.lastHit = this.now; /*and reset it to now as the current timer*/
-				response.b.loseHealth(1); /*make player base lose 1 health*/
+				response.b.loseHealth(game.data.enemyCreepAttack); /*make player base lose 1 health*/
 			} 
 		}
 
@@ -295,19 +306,19 @@ game.EnemyCreep = me.Entity.extend({
 			this.attacking=true; /*set attacking to true*/
 			//this.lastAttacking=this.now; 
 			if(xdif>0) {
-				this.pos.x = this.pos.x + 1; /*push it slightly to the right to maintain its position*/	
+				//this.pos.x = this.pos.x + 1; /*push it slightly to the right to maintain its position*/	
 				this.body.vel.x = 0; /*make it sit still*/
 			}
 			if((this.now-this.lastHit >= 1000) && xdif>0) {/*and if the last attack was more than a second ago*/
 				this.lastHit = this.now; /*and reset it to now as the current timer*/
-				response.b.loseHealth(1); /*make player lose 1 health*/
+				response.b.loseHealth(game.data.enemyCreepAttack); /*make player lose 1 health*/
 			} 
 		}	
 	}
 
 });
 game.GameManager = Object.extend({
-	init: function(x, y, settings) {
+	init: function(x, y, settings) { 
 		this.now = new Date().getTime();
 		this.lastCreep = new Date().getTime();
 
