@@ -325,9 +325,9 @@ game.GameManager = Object.extend({
 	update: function() {
 		this.now = new Date().getTime();
 
-		if(game.data.player.dead) {
-			me.game.world.removeChild(game.data.player);
-			me.state.current().resetPlayer(10, 0);
+		if(game.data.player.dead) { /*if the player is dead (has less than 0 health)*/
+			me.game.world.removeChild(game.data.player); /*remove the player*/
+			me.state.current().resetPlayer(10, 0); /*and respawn it*/
 		}
 
 		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 1 second*/

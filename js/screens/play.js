@@ -7,7 +7,7 @@ game.PlayScreen = me.ScreenObject.extend({
 		game.data.score = 0;
 		/*this loads our level*/
 		me.levelDirector.loadLevel("level01");
-		this.resetPlayer(0,420);
+		this.resetPlayer(0,420); /*run the function that spawns the player*/
 
 		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
 		me.game.world.addChild(gamemanager, 5);
