@@ -253,7 +253,7 @@ game.EnemyCreep = me.Entity.extend({
 				return (new me.Rect(0, 0, 32, 64)).toPolygon(); /*is a rectangle with these specs*/
 			}
 		}]);
-		this.health = game.data.enemyCreepHealth; /*has 3 health*/
+		this.health = game.data.EnemyCreepHealth; /*has 3 health*/
 		this.alwaysUpdate = true; /*always updates even if its not on screen*/
 		this.attacking = false; /*makes the enemy not attacking*/
 		this.lastAttacking = new Date().getTime(); /*keeps track of when our creeep last attacked anything*/
