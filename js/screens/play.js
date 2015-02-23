@@ -34,8 +34,7 @@ game.PlayScreen = me.ScreenObject.extend({
 	},
 
 	resetPlayer: function(x, y) {
-		game.data.player = me.pool.pull("player", 0, 420, {}); /*defines what player is and where it will spawn*/
-
+		game.data.player = me.pool.pull("player", x, y, {}); /*defines what player is and where it will spawn*/
 		me.game.world.addChild(game.data.player, 5); /*spawns the player*/
 	}
 });
