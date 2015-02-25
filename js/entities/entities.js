@@ -142,9 +142,9 @@ game.PlayerEntity = me.Entity.extend({
 					 && (Math.abs(ydif <= 40) /*and xdif<=40*/
 					 && ((xdif>0) && this.facing === "left") || ((xdif<0) && this.facing === "right"))) { /*if attacking and you havent attacked in 1 second*/
 					this.lastHit = this.now; /*updates timers*/
-					if(response.b.health <= game.data.playerAttack) { /*if creeps health <=  our attack*/
+					if(response.b.health <= game.data.playerAttack) { /*if creeps health <=  our attack so if you kill a creep*/
 						game.data.gold += 1; /*then add 1 gold*/
-						console.log("Current Glod: " + game.data.gold);
+						console.log("Current Glod: " + game.data.gold);/*and print how much gold you have to the console*/
 					}
 
 					response.b.loseHealth(game.data.playerAttack); /*lose 1 health*/
@@ -337,8 +337,8 @@ game.GameManager = Object.extend({
 		}
 
 		if(Math.round(this.now/1000)%20 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 20 seconds*/
-			game.data.gold += 1;
-			console.log("Current Glod: " + game.data.gold);
+			game.data.gold += 1; /*add one to gold counter*/
+			console.log("Current Glod: " + game.data.gold); /*and print the current cold to the console*/
 		}
 
 		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 10 seconds*/
