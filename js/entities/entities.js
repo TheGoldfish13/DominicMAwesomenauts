@@ -17,6 +17,7 @@ game.PlayerEntity = me.Entity.extend({
 		this.now = new Date().getTime();
 		this.lastHit = this.now;
 		this.dead = false;
+		this.attack = game.data.playerAttack;
 		this.lastAttack = new Date().getTime();
 
 		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); /*makes the camerafollow the player*/
@@ -141,6 +142,11 @@ game.PlayerEntity = me.Entity.extend({
 					 && (Math.abs(ydif <= 40) /*and xdif<=40*/
 					 && ((xdif>0) && this.facing === "left") || ((xdif<0) && this.facing === "right"))) { /*if attacking and you havent attacked in 1 second*/
 					this.lastHit = this.now; /*updates timers*/
+					if(response.b.health <= game.data.playerAttack) { /*if creeps health <=  our attack*/
+						game.data.gold += 1; /*then add 1 gold*/
+						console.log("Current Glod: " + game.data.gold);
+					}
+
 					response.b.loseHealth(game.data.playerAttack); /*lose 1 health*/
 				}
 			}
@@ -318,7 +324,7 @@ game.GameManager = Object.extend({
 	init: function(x, y, settings) { 
 		this.now = new Date().getTime();
 		this.lastCreep = new Date().getTime();
-
+		this.paused = false;
 		this.alwaysUpdate = true;
 	},
 
@@ -330,7 +336,12 @@ game.GameManager = Object.extend({
 			me.state.current().resetPlayer(10, 0); /*and respawn it*/
 		}
 
-		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 1 second*/
+		if(Math.round(this.now/1000)%20 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 20 seconds*/
+			game.data.gold += 1;
+			console.log("Current Glod: " + game.data.gold);
+		}
+
+		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 10 seconds*/
 			this.lastCreep = this.now;
 			var creepe = me.pool.pull("EnemyCreep", 1000, 0, {}); /*define what creep is*/
 			me.game.world.addChild(creepe, 5); /*and spawn one*/
