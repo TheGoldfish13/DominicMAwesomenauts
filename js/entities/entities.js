@@ -51,34 +51,9 @@ game.PlayerEntity = me.Entity.extend({
 	update: function(delta){
 		this.now = new Date().getTime();
 
-		if(this.health <= 0) {
-			this.dead = true;
-		}
+		this.dead = checkIfDead();
 
-
-
-		if(me.input.isKeyPressed("right")) { /*if the right arrow is being pushed then.....*/
-			/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
-			/*me.timer.tick makes the movement look smooth*/
-			this.body.vel.x += this.body.accel.x * me.timer.tick;
-			this.facing = "right";
-			this.flipX(true);
-		}
-		else if(me.input.isKeyPressed("left")) { /*if the right arrow is being pushed then.....*/
-			/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
-			/*me.timer.tick makes the movement look smooth*/
-			this.body.vel.x -= this.body.accel.x * me.timer.tick;
-			this.facing ="left";
-			this.flipX(false);
-		}
-		else{ /*if its not being pushed then its not moving*/
-			this.body.vel.x = 0; 
-		}
-
-		if(me.input.isKeyPressed("jump") && !this.body.jumping && !this.body.falling && !this.renderable.isCurrentAnimation("attack")) { /*if jump is pressed, and player isnt jumping or falling*/
-			this.body.jumping = true; /*set jumping equal to true*/
-			this.body.vel.y -= this.body.accel.y * me.timer.tick; /*formula saying y-velocity= y-accel * time*/
-		}
+		this.checkKeyPressesAndMove();
 
 		/*I made it so you cant attack while in the air*/
 		if(me.input.isKeyPressed("attack") && !this.body.jumping && !this.body.falling){ /*if attack key (space) is being pressed then*/
@@ -108,6 +83,45 @@ game.PlayerEntity = me.Entity.extend({
 		
 		this._super(me.Entity, "update", [delta]);
 		return true;
+	},
+
+	checkIfDead: function() {
+		if(this.health <= 0) { /*checks if dead*/
+			return true;
+		}
+	},
+
+	checkKeyPressesAndMove: function() {
+		if(me.input.isKeyPressed("right")) { /*if the right arrow is being pushed then.....*/
+			this.moveRight(); /*run moveRight function*/
+		}
+		else if(me.input.isKeyPressed("left")) { /*if the left arrow is being pushed then.....*/
+			this.moveLeft();
+		}
+		else{ /*if its not being pushed then its not moving*/
+			this.body.vel.x = 0; 
+		}
+		/*I didnt move the jump to a function because i dont feel that its necesary*/
+		if(me.input.isKeyPressed("jump") && !this.body.jumping && !this.body.falling && !this.renderable.isCurrentAnimation("attack")) { /*if jump is pressed, and player isnt jumping or falling*/
+			this.body.jumping = true; /*set jumping equal to true*/
+			this.body.vel.y -= this.body.accel.y * me.timer.tick; /*formula saying y-velocity= y-accel * time*/
+		}
+	},
+
+	moveRight: function() { /*pretty self explanitory but this is the location of the move right stuff*/
+		/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
+			/*me.timer.tick makes the movement look smooth*/
+			this.body.vel.x += this.body.accel.x * me.timer.tick;
+			this.facing = "right";
+			this.flipX(true);
+	},
+
+	moveLeft: function() {
+		/* this adds the position of my x by adding the velocity and multiplying it by me.timer.tick*/
+			/*me.timer.tick makes the movement look smooth*/
+			this.body.vel.x -= this.body.accel.x * me.timer.tick;
+			this.facing ="left";
+			this.flipX(false);
 	},
 
 	loseHealth: function(damage) {
