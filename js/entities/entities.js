@@ -1,5 +1,19 @@
 game.PlayerEntity = me.Entity.extend({
 	init: function(x, y, settings) { /*constructor function*/
+		this.setSuper();
+		this.setPlayerTimers();
+		this.setAttributes();
+		this.type = "PlayerEntity"; /*you are a player entity*/
+		this.setFlags(); /*yes or no, right or left kind of values (sortof like boolians? im guessing)*/
+
+		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); /*makes the camerafollow the player*/
+
+		this.addAnimation();
+		this.renderable.setCurrentAnimation("idle"); /*by default set the animation for idle*/
+
+	},
+
+	setSuper: function() { /*function that sets the super class*/
 		this._super(me.Entity, 'init', [x, y, {
 			image: "player", /*describes what the player entity is, its size shape ect*/
 			width: 64,
@@ -10,23 +24,27 @@ game.PlayerEntity = me.Entity.extend({
 				return(new me.Rect(0, 0, 64, 64)).toPolygon(); /*essentialy sets its hitbox*/
 			}
 		}]);
-		this.type = "PlayerEntity"; /*you are a player entity*/
-		this.health = game.data.playerHealth; /*and your health is 20*/
-		this.body.setVelocity(game.data.playerMoveSpeed, 20); /*20 for the y value is essentially gravity so that the player falls*/
-		this.facing = "right"; /*keeps track of direction of character*/
+	},
+
+	setPlayerTimers: function() { /*function that sets player timers*/
 		this.now = new Date().getTime();
 		this.lastHit = this.now;
-		this.dead = false;
+		this.lastAttack = new Date().getTime(); /*not being used currently*/
+	},
+
+	setAttributes: function() { /*sets attributes that can be changed throughout the game*/
+		this.health = game.data.playerHealth; /*and your health is 20*/
+		this.body.setVelocity(game.data.playerMoveSpeed, 20); /*20 for the y value is essentially gravity so that the player falls*/
 		this.attack = game.data.playerAttack;
-		this.lastAttack = new Date().getTime();
-
-		me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH); /*makes the camerafollow the player*/
-
+	},
+	setFlags: function() {
+		this.facing = "right"; /*keeps track of direction of character*/
+		this.dead = false;
+	},
+	addAnimation: function() {
 		this.renderable.addAnimation("idle", [78]); /*adds the animation for idle*/
 		this.renderable.addAnimation("walk", [117, 118, 119, 120, 121, 122, 123, 124, 125], 80);/*and for walk*/
 		this.renderable.addAnimation("attack", [65, 66, 67, 68, 69, 70, 71, 72], 80); /*as wellas for attack*/
-
-		this.renderable.setCurrentAnimation("idle"); /*by default set the animation for idle*/
 
 	},
 
