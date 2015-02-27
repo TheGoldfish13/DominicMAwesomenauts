@@ -40,6 +40,7 @@ game.PlayerEntity = me.Entity.extend({
 	setFlags: function() {
 		this.facing = "right"; /*keeps track of direction of character*/
 		this.dead = false;
+		this.attacking = false;	
 	},
 	addAnimation: function() {
 		this.renderable.addAnimation("idle", [78]); /*adds the animation for idle*/
@@ -56,26 +57,7 @@ game.PlayerEntity = me.Entity.extend({
 		this.checkKeyPressesAndMove();
 
 		/*I made it so you cant attack while in the air*/
-		if(me.input.isKeyPressed("attack") && !this.body.jumping && !this.body.falling){ /*if attack key (space) is being pressed then*/
-			if(!this.renderable.isCurrentAnimation("attack")) { /*check if attack is not being pressed*/
-				this.renderable.setCurrentAnimation("attack", "idle") /*if so then set animation to attack and then set it to idle*/
-				this.renderable.setAnimationFrame();
-				/*makes it so that when the animation plays again it starts from the very beggining*/ 
-			} 
-
-		}	
-		else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) { /*if the velocity doesnt equal 0*/
-			if(!this.renderable.isCurrentAnimation("walk")) { /*and if the animation is currently not "walk"*/
-				this.renderable.setCurrentAnimation("walk"); /* then set it to walk*/
-			}
-		}
-		else if(!this.renderable.isCurrentAnimation("attack")) {
-			this.renderable.setCurrentAnimation("idle"); /*otherwise set animation to idle*/
-		}
-
-		if(this.renderable.isCurrentAnimation("attack"))  { /*I made it so that you cant move while attacking*/
-			this.body.vel.x = 0; /*if you're attacking your x velocity is 0*/
-		}
+		this.setAnimation();
 
 
 		me.collision.check(this, true, this.collideHandler.bind(this), true); /*passing parameter tha is checking for thecollision and whatever its running in to*/
@@ -106,6 +88,8 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.jumping = true; /*set jumping equal to true*/
 			this.body.vel.y -= this.body.accel.y * me.timer.tick; /*formula saying y-velocity= y-accel * time*/
 		}
+
+		this.attacking = me.input.isKeyPressed("attack")
 	},
 
 	moveRight: function() { /*pretty self explanitory but this is the location of the move right stuff*/
@@ -122,6 +106,29 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.vel.x -= this.body.accel.x * me.timer.tick;
 			this.facing ="left";
 			this.flipX(false);
+	},
+
+	setAnimation: function() {
+		if(this.attacking && !this.body.jumping && !this.body.falling){ /*if attack key (space) is being pressed then*/
+			if(!this.renderable.isCurrentAnimation("attack")) { /*check if attack is not being pressed*/
+				this.renderable.setCurrentAnimation("attack", "idle") /*if so then set animation to attack and then set it to idle*/
+				this.renderable.setAnimationFrame();
+				/*makes it so that when the animation plays again it starts from the very beggining*/ 
+			} 
+
+		}	
+		else if(this.body.vel.x !== 0 && !this.renderable.isCurrentAnimation("attack")) { /*if the velocity doesnt equal 0*/
+			if(!this.renderable.isCurrentAnimation("walk")) { /*and if the animation is currently not "walk"*/
+				this.renderable.setCurrentAnimation("walk"); /* then set it to walk*/
+			}
+		}
+		else if(!this.renderable.isCurrentAnimation("attack")) {
+			this.renderable.setCurrentAnimation("idle"); /*otherwise set animation to idle*/
+		}
+
+		if(this.renderable.isCurrentAnimation("attack"))  { /*I made it so that you cant move while attacking*/
+			this.body.vel.x = 0; /*if you're attacking your x velocity is 0*/
+		}
 	},
 
 	loseHealth: function(damage) {
