@@ -57,7 +57,7 @@ game.PlayerEntity = me.Entity.extend({
 		this.checkKeyPressesAndMove();
 
 		/*I made it so you cant attack while in the air*/
-		this.setAnimation();
+		this.setAnimation(); /*part of refactoring code to make it more managable*/
 
 
 		me.collision.check(this, true, this.collideHandler.bind(this), true); /*passing parameter tha is checking for thecollision and whatever its running in to*/
@@ -108,7 +108,7 @@ game.PlayerEntity = me.Entity.extend({
 			this.flipX(false);
 	},
 
-	setAnimation: function() {
+	setAnimation: function() { /*function for setting animations*/
 		if(this.attacking && !this.body.jumping && !this.body.falling){ /*if attack key (space) is being pressed then*/
 			if(!this.renderable.isCurrentAnimation("attack")) { /*check if attack is not being pressed*/
 				this.renderable.setCurrentAnimation("attack", "idle") /*if so then set animation to attack and then set it to idle*/
