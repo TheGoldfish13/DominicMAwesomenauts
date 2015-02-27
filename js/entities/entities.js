@@ -137,7 +137,15 @@ game.PlayerEntity = me.Entity.extend({
 
 	collideHandler: function(response) {
 		if(response.b.type ==='EnemyBaseEntity'){ 
-			var ydif = this.pos.y - response.b.pos.y; /*sets variable equal to y-pos - responce.b.y-pos*/
+			this.collideWithEnemyBase(response);
+		}
+		else if(response.b.type === 'EnemyCreep') {
+			this.collideWithEnemyCreep(response);
+			}
+	},
+
+	collideWithEnemyBase: function(response) {
+		var ydif = this.pos.y - response.b.pos.y; /*sets variable equal to y-pos - responce.b.y-pos*/
 			var xdif = this.pos.x - response.b.pos.x; /*sets variable equal to x-pos - responce.b.x-pos*/
 
 			if(ydif< -40 && xdif< 70 && xdif >-35 && ydif>-50) { /*if you're in the location of the upper hitbox*/
@@ -158,26 +166,30 @@ game.PlayerEntity = me.Entity.extend({
 				this.lastHit = this.now; /*makes it so it will only lose health once per one attack*/
 				response.b.loseHealth(game.data.playerAttack); /*tower will lose health*/
 			}
-			
-		}
-		else if(response.b.type === 'EnemyCreep') {
-			var xdif = this.pos.x - response.b.pos.x; /*making collision hitbox for x*/
+	},
+
+	collideWithEnemyCreep: function(response) {
+		var xdif = this.pos.x - response.b.pos.x; /*making collision hitbox for x*/
 			var ydif = this.pos.y - response.b.pos.y; /*collision for y*/
 
-			if(xdif>0) { /*if xdif>0 (coming from the right)*/
-				//this.pos.x = this.pos.x + 1; /*then push slighty to the right*/
+			this.stopMovement(xdif);
+			this.checkAttack(xdif, ydif, responce);	
+	},
+
+	stopMovement: function(xdif) {
+		if(xdif>0) { /*if xdif>0 (coming from the right)*/
 				if(this.facing==="left") { /*and if facing left*/
 					this.body.vel.x = 0; /*make velocity = 0*/
 				}
 			}
 			else{ /*if coming from left*/
-				//this.pos.x = this.pos.x - 1; /*push slighty to left*/
 				if(this.facing==="right") { /*and if facing right*/
 					this.body.vel.x = 0; /*make velocity = 0*/
 				}
 			}
-
-				if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= game.data.playerAttackTimer /*if attacking and havent attacked in a second*/
+		},
+	checkAttack: function(xdif, ydif, response) {
+		if(this.renderable.isCurrentAnimation("attack") && this.now-this.lastHit >= game.data.playerAttackTimer /*if attacking and havent attacked in a second*/
 					 && (Math.abs(ydif <= 40) /*and xdif<=40*/
 					 && ((xdif>0) && this.facing === "left") || ((xdif<0) && this.facing === "right"))) { /*if attacking and you havent attacked in 1 second*/
 					this.lastHit = this.now; /*updates timers*/
@@ -188,8 +200,7 @@ game.PlayerEntity = me.Entity.extend({
 
 					response.b.loseHealth(game.data.playerAttack); /*lose 1 health*/
 				}
-			}
-	}
+	}	
 });
 /*Player base*/
 
