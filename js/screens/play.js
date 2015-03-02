@@ -9,8 +9,11 @@ game.PlayScreen = me.ScreenObject.extend({
 		me.levelDirector.loadLevel("level01");
 		this.resetPlayer(0,420); /*run the function that spawns the player*/
 
-		var gamemanager = me.pool.pull("GameManager", 0, 0, {});
-		me.game.world.addChild(gamemanager, 5);
+		var gameTimerManager = me.pool.pull("GameTimerManager", 0, 0, {});
+		me.game.world.addChild(gameTimerManager, 5);
+
+		var heroDeathManager = me.pool.pull("HeroDeathManager", 0, 0, {});
+		me.game.world.addChild(heroDeathManager, 5);
 
 		/*------Adding Controls------*/
 

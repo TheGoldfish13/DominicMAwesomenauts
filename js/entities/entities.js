@@ -208,12 +208,3 @@ game.PlayerEntity = me.Entity.extend({
 					response.b.loseHealth(game.data.playerAttack); /*lose 1 health*/
 	}	
 });
-/*Player base*/
-
-
-
-/*Enemy base*/
-
-
-
-/*where GameManager would go, just in case i need it for later...*/
