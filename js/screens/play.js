@@ -15,6 +15,9 @@ game.PlayScreen = me.ScreenObject.extend({
 		var heroDeathManager = me.pool.pull("HeroDeathManager", 0, 0, {});
 		me.game.world.addChild(heroDeathManager, 5);
 
+		var experienceManager = me.pool.pull("ExperienceManager", 0, 0, {});
+		me.game.world.addChild(experienceManager, 5);
+
 		/*------Adding Controls------*/
 
 		me.input.bindKey(me.input.KEY.RIGHT, "right"); /*adds the control for right*/
