@@ -25,6 +25,7 @@ game.EnemyBaseEntity = me.Entity.extend({
 	update:function(delta) { /*keep checking if*/
 		if(this.health<=0) { /*the health<=0 then the tower is broken*/
 			this.broken = true; /*if so, then set it to broken*/
+			game.data.win = true; /*and you win*/
 			this.renderable.setCurrentAnimation("broken");  /*and use the broken animation*/
 		}
 		this.body.update(delta); /*time since last update*/
