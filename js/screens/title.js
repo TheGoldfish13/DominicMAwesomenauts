@@ -46,6 +46,11 @@ game.TitleScreen = me.ScreenObject.extend({
 			},
 
 			newGame: function() { /*when a new game is started*/
+				game.data.exp = me.save.exp;
+				game.data.exp1 = me.save.exp1;
+				game.data.exp2 = me.save.exp2;
+				game.data.exp3 = me.save.exp3;
+				game.data.exp4 = me.save.exp4;
 				me.input.releasePointerEvent('pointerdown', this); /*get rid of mouse click event*/
 				me.state.change(me.state.PLAY);
 			}
