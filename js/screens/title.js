@@ -52,7 +52,7 @@ game.TitleScreen = me.ScreenObject.extend({
 				game.data.exp3 = me.save.exp3;
 				game.data.exp4 = me.save.exp4;
 				me.input.releasePointerEvent('pointerdown', this); /*get rid of mouse click event*/
-				me.state.change(me.state.PLAY);
+				me.state.change(me.state.SPENDEXP);
 			}
 		})));
 
