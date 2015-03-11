@@ -74,3 +74,16 @@ game.ExperienceManager = Object.extend({
 	}
 
 });
+
+game.SpendGold = Object.extend({ /*make spend gold class*/
+	init: function(x, y, settings) { /*that when initially created*/
+		this.now = new Date().getTime();
+		this.lastBuy = new Date().getTime(); /*keeps track of last buy*/
+		this.paused = false; /*isnt paused*/
+		this.alwaysUpdate = true; /*always updates*/
+	},
+
+	update: function() {
+		return true;
+	}
+});
