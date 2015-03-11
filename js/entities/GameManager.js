@@ -77,13 +77,43 @@ game.ExperienceManager = Object.extend({
 
 game.SpendGold = Object.extend({ /*make spend gold class*/
 	init: function(x, y, settings) { /*that when initially created*/
-		this.now = new Date().getTime();
+		this.now = new Date().getTime(); /*updates timers*/
 		this.lastBuy = new Date().getTime(); /*keeps track of last buy*/
 		this.paused = false; /*isnt paused*/
 		this.alwaysUpdate = true; /*always updates*/
+		this.updateWhenPaused = true; /*even when paused*/
 	},
 
 	update: function() {
+		this.now = new Date().getTime(); /*updates timers*/
+		if(me.input.isKeyPressed("buy") && this.now-this.lastBuy >= 1000) { /*if b is pressed and it hasnt been a second since last push*/
+			this.lastBuy = this.now; /*update timer*/
+			if(!this.buying){  /*and you are not buyin*/
+				this.startBuying(); /*start buying*/
+			}
+			else{ /*if you are buying already*/
+				this.stopBuying(); /*then stop*/
+			}
+		}
+
 		return true;
+	},
+
+	startBuying: function() {
+		this.buying = true; 
+		me.state.pause(me.state.PLAY); /*set gamestate to play*/
+		game.data.pausePos = me.game.viewport.localToWorld(0, 0); /*keeps track of where the player is*/
+		game.data.buyscreen = new me.Sprite(game.data.pausePos.x, game.data.pausePos.y, me.loader.getImage("gold-screen"));
+		game.data.buyscreen.updateWhenPaused = true;
+		game.data.buyscreen.setOpacity(0.85);
+		me.game.world.addChild(game.data.buyscreen, 34);/*adds the buy screen*/
+		game.data.player.body.setVelocity(0, 0); /*make the player stop moving*/
+	},
+	stopBuying: function(){
+		this.buying = false;
+		me.state.resume(me.state.PLAY);
+		game.data.player.body.setVelocity(game.data.playerMoveSpeed, 20); /*returns the players movement*/
+		me.game.world.removeChild(game.data.buyscreen); /*gets rid of the buyscreen*/
+	
 	}
 });
