@@ -32,6 +32,7 @@ var game = {
 		win: "",
 		pausePos: "",
 		buyscreen: "",
+		buytext: ""
 	},
 	
 	
@@ -74,6 +75,7 @@ var game = {
 		me.pool.register("PlayerBase", game.PlayerBaseEntity);
 		me.pool.register("EnemyBase", game.EnemyBaseEntity);
 		me.pool.register("EnemyCreep", game.EnemyCreep, true);
+		me.pool.register("PlayerCreep", game.PlayerCreep, true);
 		me.pool.register("GameTimerManager", game.GameTimerManager);
 		me.pool.register("HeroDeathManager", game.HeroDeathManager);
 		me.pool.register("ExperienceManager", game.ExperienceManager);

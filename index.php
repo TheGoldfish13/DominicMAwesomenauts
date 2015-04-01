@@ -32,6 +32,7 @@
 		<script type="text/javascript" src="js/entities/PlayerBaseEntity.js"></script> <!-- PlayerBase-->
 		<script type="text/javascript" src="js/entities/GameManager.js"></script> <!-- Game manager -->
 		<script type="text/javascript" src="js/entities/EnemyCreep.js"></script> <!-- and Enemy Creep to reduce file size and increase orginization -->
+		<script type="text/javascript" src="js/entities/PlayerCreep.js"></script>
 
 
 		<script type="text/javascript" src="js/entities/HUD.js"></script>

@@ -11,6 +11,7 @@ game.GameTimerManager = Object.extend({
 
 		this.goldTimerCheck(); /*code refactoring to increase orginaztion*/
 		this.creepTimerCheck();
+		//this.playerCreepTimerCheck();
 		return true;
 	},
 	goldTimerCheck: function() {
@@ -26,7 +27,16 @@ game.GameTimerManager = Object.extend({
 			var creepe = me.pool.pull("EnemyCreep", 1000, 0, {}); /*define what creep is*/
 			me.game.world.addChild(creepe, 5); /*and spawn one*/
 		}
-	}
+	},
+
+	// playerCreepTimerCheck: function() {
+	// 	if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 10 seconds*/
+	// 		this.lastCreep = this.now;
+	// 		var creepe = me.pool.pull("PlayerCreep", 1000, 0, {}); /*define what creep is*/
+	// 		me.game.world.addChild(creepe, 5); /*and spawn one*/
+	// 	}
+	// }
+
 });
 
 game.HeroDeathManager = Object.extend({
@@ -108,12 +118,43 @@ game.SpendGold = Object.extend({ /*make spend gold class*/
 		game.data.buyscreen.setOpacity(0.85);
 		me.game.world.addChild(game.data.buyscreen, 34);/*adds the buy screen*/
 		game.data.player.body.setVelocity(0, 0); /*make the player stop moving*/
+		me.state.pause(me.state.PLAY); /*set gamestate to play*/
+		me.input.bindKey(me.input.KEY.F1, "F1", true); /*binding keys F1-F6*/
+		me.input.bindKey(me.input.KEY.F2, "F2", true);
+		me.input.bindKey(me.input.KEY.F3, "F3", true);
+		me.input.bindKey(me.input.KEY.F4, "F4", true);
+		me.input.bindKey(me.input.KEY.F5, "F5", true);
+		me.input.bindKey(me.input.KEY.F6, "F6", true);
+		this.setBuyText(); /*calls setBuyText function*/
 	},
+
+	setBuyText: function() {
+		game.data.buytext = new (me.Renderable.extend({ /*adds me.Renderable*/
+			init: function() { /*initially make...*/
+				this._super(me.Renderable, 'init', [game.data.pausePos.x, game.data.pausePos.y, 300, 50]);
+				this.font = new me.Font("Comic Sans MS", 26, "pink"); /*font is much comic sans, very pink*/
+				this.updateWhenPaused = true; /*self explanitory*/
+				this.alwaysUpdate = true;
+			},
+
+			draw: function(renderer) {
+				this.font.draw(renderer.getContext(), "Press F1-F6 to buy, b to exit", this.pos.x, this.pos.y); /*puts instructions*/
+			}	
+		}));
+	me.game.world.addChild(game.data.buytext, 35);
+	},
+
 	stopBuying: function(){
 		this.buying = false;
 		me.state.resume(me.state.PLAY);
 		game.data.player.body.setVelocity(game.data.playerMoveSpeed, 20); /*returns the players movement*/
 		me.game.world.removeChild(game.data.buyscreen); /*gets rid of the buyscreen*/
-	
+		me.input.unbindKey(me.input.KEY.F1, "F1", true); /*unbind all the keys*/
+		me.input.unbindKey(me.input.KEY.F2, "F2", true);
+		me.input.unbindKey(me.input.KEY.F3, "F3", true);
+		me.input.unbindKey(me.input.KEY.F4, "F4", true);
+		me.input.unbindKey(me.input.KEY.F5, "F5", true);
+		me.input.unbindKey(me.input.KEY.F6, "F6", true); 
+		me.game.world.removeChild(game.data.buytext); 
 	}
 });
