@@ -132,13 +132,19 @@ game.SpendGold = Object.extend({ /*make spend gold class*/
 		game.data.buytext = new (me.Renderable.extend({ /*adds me.Renderable*/
 			init: function() { /*initially make...*/
 				this._super(me.Renderable, 'init', [game.data.pausePos.x, game.data.pausePos.y, 300, 50]);
-				this.font = new me.Font("Comic Sans MS", 26, "pink"); /*font is much comic sans, very pink*/
+				this.font = new me.Font("Comic Sans MS", 28, "white"); /*font is much comic sans, very white*/
 				this.updateWhenPaused = true; /*self explanitory*/
 				this.alwaysUpdate = true;
 			},
 
 			draw: function(renderer) {
-				this.font.draw(renderer.getContext(), "Press F1-F6 to buy, b to exit", this.pos.x, this.pos.y); /*puts instructions*/
+				this.font.draw(renderer.getContext(), "Press F1-F6 to buy, B to exit. Current Gold: " + game.data.gold, this.pos.x, this.pos.y); /*puts instructions*/
+				this.font.draw(renderer.getContext(), "Skill 1: Increase Damage. Current Level: " + game.data.skill1 + " Cost: " + ((game.data.skill1+1)*10), this.pos.x, this.pos.y + 40);
+				this.font.draw(renderer.getContext(), "Skill 2: Run Faster. Current Level: " + game.data.skill2 + " Cost: " + ((game.data.skill2+1)*10), this.pos.x, this.pos.y + 80);
+				this.font.draw(renderer.getContext(), "Skill 3: Increase Health. Current level: " + game.data.skill3 + " Cost: " + ((game.data.skill3+1)*10), this.pos.x, this.pos.y + 120);
+				this.font.draw(renderer.getContext(), "Speed Burst: Press Q to run faster. Current Level: " + game.data.ability1 + " Cost: " + ((game.data.ability1+1)*10), this.pos.x, this.pos.y + 160);
+				this.font.draw(renderer.getContext(), "Big Appetite: Press W to eat your creep for health. Current Level: " + game.data.ability2 + " Cost: " + ((game.data.ability2+1)*10), this.pos.x, this.pos.y + 200);
+				this.font.draw(renderer.getContext(), "Spear Throw: Press E to throw your spear. Current Level " + game.data.ability3 + " Cost: " + ((game.data.ability3+1)*10), this.pos.x, this.pos.y + 240);
 			}	
 		}));
 	me.game.world.addChild(game.data.buytext, 35);
