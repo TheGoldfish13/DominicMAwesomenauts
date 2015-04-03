@@ -106,6 +106,8 @@ game.SpendGold = Object.extend({ /*make spend gold class*/
 			}
 		}
 
+		this.checkBuyKeys();
+
 		return true;
 	},
 
@@ -162,5 +164,89 @@ game.SpendGold = Object.extend({ /*make spend gold class*/
 		me.input.unbindKey(me.input.KEY.F5, "F5", true);
 		me.input.unbindKey(me.input.KEY.F6, "F6", true); 
 		me.game.world.removeChild(game.data.buytext); 
-	}
+	},
+	checkBuyKeys: function(){
+		if(me.input.isKeyPressed("F1")){ /*if this buy key is pressed*/
+			if(this.checkCost(1)){ /*and if you have enough gold to afford it*/
+				this.makePurchase(1); /*make the pruchase*/
+			}
+		}else if(me.input.isKeyPressed("F2")){ /*repeat for all the keys*/ 
+			if(this.checkCost(2)){
+				this.makePurchase(2);
+			}
+		}else if(me.input.isKeyPressed("F3")){
+			if(this.checkCost(3)){
+				this.makePurchase(3);
+			}
+		}else if(me.input.isKeyPressed("F4")){
+			if(this.checkCost(4)){
+				this.makePurchase(4);
+			}
+		}else if(me.input.isKeyPressed("F5")){
+			if(this.checkCost(5)){
+				this.makePurchase(5);
+			}
+		}else if(me.input.isKeyPressed("F6")){
+			if(this.checkCost(6)){
+				this.makePurchase(6);
+			}
+		}
+	},
+
+	checkCost: function(skill){
+		if(skill1===1 && (game.data.gold >= ((game.data.skill1 + 1) * 10))){ /*if you chose skill1 and you have enough gold to level it up, return true*/
+
+		}else{
+			return false;
+		}
+		if(skill2===2 && (game.data.gold >= ((game.data.skill2 + 1) * 10))){ 
+
+		}else{
+			return false;
+		}
+		if(skill3===3 && (game.data.gold >= ((game.data.skill3 + 1) * 10))){ 
+		}else{
+			return false;
+		}
+		if(skill4===4 && (game.data.gold >= ((game.data.ability1 + 1) * 10))){ 
+
+		}else{
+			return false;
+		}
+		if(skill5===5 && (game.data.gold >= ((game.data.ability2 + 5) * 10))){ 
+
+		}else{
+			return false;
+		}
+		if(skill6===6 && (game.data.gold >= ((game.data.ability3 + 6) * 10))){ 
+
+		}else{
+			return false;
+		}
+	},
+
+	makePurchase: function(skill){
+		if(skill===1){
+			game.data.gold -= ((game.data.skill1 + 1)*10);
+			game.data.skill1 += 1;
+			game.data.player.attack += 1;
+		}else if(skill2===2){
+			game.data.gold -= ((game.data.skill2 + 1)*10);
+			game.data.skill1 += 1;
+		}else if(skill2===3){
+			game.data.gold -= ((game.data.skill3 + 1)*10);
+			game.data.skill1 += 1;
+		}else if(ability1===4){
+			game.data.gold -= ((game.data.ability1 + 1)*10);
+			game.data.skill1 += 1;
+		}else if(ability2===5){
+			game.data.gold -= ((game.data.ability2 + 1)*10);
+			game.data.skill1 += 1;
+		}else if(ability3===6){
+			game.data.gold -= ((game.data.ability3 + 1)*10);
+			game.data.skill1 += 1;
+		}
+
+ 	}
+
 });
