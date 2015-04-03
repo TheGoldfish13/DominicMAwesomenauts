@@ -30,7 +30,12 @@
 		<script type="text/javascript" src="js/entities/entities.js"></script> <!-- loading scripts for entity-->
 		<script type="text/javascript" src="js/entities/EnemyBaseEntity.js"></script> <!-- EnemyBase --> 
 		<script type="text/javascript" src="js/entities/PlayerBaseEntity.js"></script> <!-- PlayerBase-->
-		<script type="text/javascript" src="js/entities/GameManager.js"></script> <!-- Game manager -->
+		<!-- game managers -->
+		<script type="text/javascript" src="js/gamemanagers/GameManager.js"></script> <!-- Game manager -->
+		<script type="text/javascript" src="js/gamemanagers/GameTimerManager.js"></script>
+		<script type="text/javascript" src="js/gamemanagers/SpendGold.js"></script>
+		<script type="text/javascript" src="js/gamemanagers/HeroDeathManager.js"></script>
+		
 		<script type="text/javascript" src="js/entities/EnemyCreep.js"></script> <!-- and Enemy Creep to reduce file size and increase orginization -->
 		<script type="text/javascript" src="js/entities/PlayerCreep.js"></script>
 
