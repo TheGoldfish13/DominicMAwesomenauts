@@ -27,10 +27,10 @@
 			echo json_encode($array);			
 		}
 		else {
-			echo "<p> invalid username or password </p>"; /*if not then it echoes invalid username or password*/
+			echo "Invalid username and password"; /*if not then it echoes invalid username or password*/
 		}
 	}
 	else {
-		echo "<p> invalid username and password </p>";
+		echo "Invalid username and password";
 	}
 ?>	

@@ -8,6 +8,7 @@ game.LoadProfile = me.ScreenObject.extend({
 		document.getElementById("load").style.visibility = "visible";
 
 
+
 		me.input.unbindKey(me.input.KEY.B); /*unbinds keys*/
 		me.input.unbindKey(me.input.KEY.Q);
 		me.input.unbindKey(me.input.KEY.E);
@@ -31,8 +32,8 @@ game.LoadProfile = me.ScreenObject.extend({
 	 *  action to perform when leaving this screen (state change)
 	 */
 	onDestroyEvent: function() {
-		document.getElementById("input").style.visibility = "visible";
-		document.getElementById("load").style.visibility = "visible";
+		document.getElementById("input").style.visibility = "hidden";
+		document.getElementById("load").style.visibility = "hidden";
 	
 	}
 });

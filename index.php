@@ -30,7 +30,7 @@
 
 			<div class='password'>
 				<label for='password'>Password</label>
-				<input type='text' name="password" id="password">
+				<input type='password' name="password" id="password"> <!-- type=password makes it thedot things -->
 			</div>
 
 			<button type='button' id="register">Register</button>
@@ -118,6 +118,35 @@
 					}
 					else{
 						alert(response); /*alter the response*/
+					}
+				})
+				.fail(function(response){ /*if failed*/
+					alert("Fail"); /*alert fail*/
+				});
+		});
+
+		$("#load").bind("click", function(){ /*when register is clicked on it will post information (username and password) to create-user file*/
+			$.ajax({
+				type: "POST",
+				url: "php/controller/login-user.php",
+				data: {
+					username: $("#username").val(),
+					password: $("password").val(),
+				},
+				dataType: "text"
+			})
+				.success(function(response){ /*if succeded*/
+					if(response==="Invalid username and password"){
+						alert(response); /*alert the response*/
+					}
+					else{
+						var data = jQuery.parseJSON(response);
+						game.data.exp = data["exp"];
+						game.data.exp1 = data["exp1"];
+						game.data.exp2 = data["exp2"];
+						game.data.exp3 = data["exp3"];
+						game.data.exp4 = data["exp4"];
+						me.state.change(me.state.SPENDEXP); /*change state to play*/
 					}
 				})
 				.fail(function(response){ /*if failed*/
