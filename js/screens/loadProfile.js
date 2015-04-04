@@ -3,7 +3,10 @@ game.LoadProfile = me.ScreenObject.extend({
 	 *  action to perform on state change
 	 */
 	onResetEvent: function() {	
-		me.game.world.addChild(new me.Sprite(0, 0, me.loader.getImage('old-screen')), -10); /*adds the old-screen background. -10 is its layer*/
+		me.game.world.addChild(new me.Sprite(0, 0, me.loader.getImage('load-screen')), -10); /*adds the load-screen background. -10 is its layer*/
+		document.getElementById("input").style.visibility = "visible";
+		document.getElementById("load").style.visibility = "visible";
+
 
 		me.input.unbindKey(me.input.KEY.B); /*unbinds keys*/
 		me.input.unbindKey(me.input.KEY.Q);
@@ -28,7 +31,8 @@ game.LoadProfile = me.ScreenObject.extend({
 	 *  action to perform when leaving this screen (state change)
 	 */
 	onDestroyEvent: function() {
-		
+		document.getElementById("input").style.visibility = "visible";
+		document.getElementById("load").style.visibility = "visible";
 	
 	}
 });

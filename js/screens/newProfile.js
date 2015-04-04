@@ -4,6 +4,8 @@ game.NewProfile = me.ScreenObject.extend({
 	 */
 	onResetEvent: function() {	
 		me.game.world.addChild(new me.Sprite(0, 0, me.loader.getImage('new-screen')), -10); /*adds the new-screen background. -10 is its layer*/
+		document.getElementById("input").style.visibility = "visible";
+		document.getElementById("register").style.visibility = "visible";
 
 		me.input.unbindKey(me.input.KEY.B); /*unbind keys*/
 		me.input.unbindKey(me.input.KEY.Q);
@@ -28,7 +30,8 @@ game.NewProfile = me.ScreenObject.extend({
 	 *  action to perform when leaving this screen (state change)
 	 */
 	onDestroyEvent: function() {
-		
+		document.getElementById("input").style.visibility = "hidden";
+		document.getElementById("register").style.visibility = "hidden";
 	
 	}
 });
