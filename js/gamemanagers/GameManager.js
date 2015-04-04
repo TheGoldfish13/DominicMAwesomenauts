@@ -1,44 +1,3 @@
-game.GameTimerManager = Object.extend({
-	init: function(x, y, settings) { 
-		this.now = new Date().getTime();
-		this.lastCreep = new Date().getTime();
-		this.paused = false;
-		this.alwaysUpdate = true;
-	},
-
-	update: function() {
-		this.now = new Date().getTime();
-
-		this.goldTimerCheck(); /*code refactoring to increase orginaztion*/
-		this.creepTimerCheck();
-		//this.playerCreepTimerCheck();
-		return true;
-	},
-	goldTimerCheck: function() {
-		if(Math.round(this.now/1000)%20 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 20 seconds*/
-			game.data.gold += (game.data.exp1 + 1); /*add one to gold counter*/
-			console.log("Current Glod: " + game.data.gold); /*and print the current cold to the console*/
-		}
-	},
-
-	creepTimerCheck: function() {
-		if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 10 seconds*/
-			this.lastCreep = this.now;
-			var creepe = me.pool.pull("EnemyCreep", 1000, 0, {}); /*define what creep is*/
-			me.game.world.addChild(creepe, 5); /*and spawn one*/
-		}
-	},
-
-	// playerCreepTimerCheck: function() {
-	// 	if(Math.round(this.now/1000)%10 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 10 seconds*/
-	// 		this.lastCreep = this.now;
-	// 		var creepe = me.pool.pull("PlayerCreep", 1000, 0, {}); /*define what creep is*/
-	// 		me.game.world.addChild(creepe, 5); /*and spawn one*/
-	// 	}
-	// }
-
-});
-
 game.ExperienceManager = Object.extend({
 	init: function(x, y, settings) { 
 		this.alwaysUpdate = true; /*always update*/
@@ -48,9 +7,11 @@ game.ExperienceManager = Object.extend({
 	update: function() { /*constantly check*/
 		if(game.data.win===true && !this.gameover) { /*if you've won and game over is false (either you lost or won)*/
 			this.gameOver(true); /*run gameOver*/
+			alert("YOU WIN!");
 		}
 		else if(game.data.win===false && !this.gameover) { /*if you lost and gameOver is false*/
 			this.gameOver(false); /*run gameOver*/
+			alert("YOU LOSE");
 		}
 
 		return true;
@@ -66,6 +27,31 @@ game.ExperienceManager = Object.extend({
 		/*regardless of winning or losing*/
 		this.gameover = true; /*and end the game*/
 		me.save.exp = game.data.exp; /*and save exp*/
+
+
+			$.ajax({
+				type: "POST",
+				url: "php/controller/save-user.php",
+				data: {
+					exp: game.data.exp,
+					exp1: game.data.exp1,
+					exp2: game.data.exp2,
+					exp3: game.data.exp3,
+					exp4: game.data.exp4,
+				},
+				dataType: "text"
+			})
+				.success(function(response){ /*if succeded*/
+					if(response==="true"){
+						me.state.change(me.state.MENU); /*change state to play*/
+					}
+					else{
+						alert(response); /*alter the response*/
+					}
+				})
+				.fail(function(response){ /*if failed*/
+					alert("Fail"); /*alert fail*/
+				});
 	}
 
 });
