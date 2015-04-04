@@ -13,10 +13,3 @@
 		. "exp3 int(4),"
 		. "exp4 int(4),"
 		. "PRIMARY KEY (id))");
-	if($query) {
-		echo "<p>Succesfully created table user: </p>"; /*checking if table user was succefully created*/
-	}
-	// else {
-	// 	echo "<p>" . $_SESSION["connection"]->error . "</p>";
-	// }
-?>

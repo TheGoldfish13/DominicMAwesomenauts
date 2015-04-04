@@ -8,7 +8,7 @@
 	$hashedPassword = crypt($password, $salt); /*makes the hashed password*/
 
 	$query = $_SESSION["connection"]->query("INSERT INTO users SET " /*creates a query that inserts the variables into the users table */
-		. "email = '$email',"
+		. "email = '',"
 		. "username = '$username',"
 		. "password = '$hashedPassword',"
 		. "salt = '$salt',"

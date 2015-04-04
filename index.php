@@ -1,4 +1,7 @@
 <!DOCTYPE HTML>
+<?php 
+	require_once("php/controller/create-db.php"); 
+?>
 <html>
 	<head>
 		<title>melonJS Template</title>
@@ -11,6 +14,9 @@
         <link rel="apple-touch-icon" sizes="76x76" href="icons/touch-icon-ipad-76x76.png">
         <link rel="apple-touch-icon" sizes="120x120" href="icons/touch-icon-iphone-retina-120x120.png">
         <link rel="apple-touch-icon" sizes="152x152" href="icons/touch-icon-ipad-retina-152x152.png">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
 	</head>
 	<body>
 		<!-- Canvas placeholder -->
@@ -90,6 +96,34 @@
 					});
 				}
 			});
+		</script>
+
+		<script>
+		$("#mainmenu").bind("click", function(){ /*when mainmenu button is clicked go to menu*/
+			me.state.change(me.state.MENU);
+		});
+		$("#register").bind("click", function(){ /*when register is clicked on it will post information (username and password) to create-user file*/
+			$.ajax({
+				type: "POST",
+				url: "php/controller/create-user.php",
+				data: {
+					username: $("#username").val(),
+					password: $("password").val(),
+				},
+				dataType: "text"
+			})
+				.success(function(response){ /*if succeded*/
+					if(response==="true"){
+						me.state.change(me.state.PLAY); /*change state to play*/
+					}
+					else{
+						alert(response); /*alter the response*/
+					}
+				})
+				.fail(function(response){ /*if failed*/
+					alert("Fail"); /*alert fail*/
+				});
+		});
 		</script>
 	</body>
 </html>
