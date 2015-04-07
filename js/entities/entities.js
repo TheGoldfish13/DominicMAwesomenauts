@@ -29,6 +29,7 @@ game.PlayerEntity = me.Entity.extend({
 	setPlayerTimers: function() { /*function that sets player timers*/
 		this.now = new Date().getTime();
 		this.lastHit = this.now;
+		this.lastSpear = this.now;
 		this.lastAttack = new Date().getTime(); /*not being used currently*/
 	},
 
@@ -55,6 +56,7 @@ game.PlayerEntity = me.Entity.extend({
 		this.dead = this.checkIfDead(); 
 
 		this.checkKeyPressesAndMove();
+		this.checkAbilityKeys();
 
 		/*I made it so you cant attack while in the air*/
 		this.setAnimation(); /*part of refactoring code to make it more managable*/
@@ -106,6 +108,24 @@ game.PlayerEntity = me.Entity.extend({
 			this.body.vel.x -= this.body.accel.x * me.timer.tick;
 			this.facing ="left";
 			this.flipX(false);
+	},
+
+	checkAbilityKeys: function(){
+		if(me.input.isKeyPressed("skill1")){
+			//this.speedBurst();
+		}else if(me.input.isKeyPressed("skill2")){
+			//this.eatCreep();
+		}else if(me.input.isKeyPressed("skill3")){
+			this.throwSpear();
+		}
+	},
+
+	throwSpear: function(){
+		if(this.lastSpear >= game.data.spearTimer && game.data.ability3 >= 0){
+			this.lastSpear = this.now;
+			var spear = me.pool.pull("spear", this.pos.x, this.pos.y, {});
+			me.game.world.addChild(spear, 10);
+		}
 	},
 
 	setAnimation: function() { /*function for setting animations*/

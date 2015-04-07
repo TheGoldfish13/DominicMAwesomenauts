@@ -108,7 +108,7 @@
 				url: "php/controller/create-user.php",
 				data: {
 					username: $("#username").val(),
-					password: $("password").val(),
+					password: $("#password").val(),
 				},
 				dataType: "text"
 			})
