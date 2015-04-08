@@ -22,7 +22,7 @@ var game = {
 		creepMoveSpeed: 5,
 		gameTimerManager: "",
 		heroDeathManager: "",
-		spearTimer: 15,
+		spearTimer: 5000,
 		player: "",
 		exp: 0,
 		gold: 0,

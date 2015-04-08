@@ -131,7 +131,7 @@
 				url: "php/controller/login-user.php",
 				data: {
 					username: $("#username").val(),
-					password: $("password").val(),
+					password: $("password").val()
 				},
 				dataType: "text"
 			})
@@ -140,6 +140,7 @@
 						alert(response); /*alert the response*/
 					}
 					else{
+						alert(response);
 						var data = jQuery.parseJSON(response);
 						game.data.exp = data["exp"];
 						game.data.exp1 = data["exp1"];

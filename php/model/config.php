@@ -3,7 +3,7 @@
 	session_start();
 	session_regenerate_id(true);
 
-	$path = "/DominicMAwesomenauts/php/"; /*stores the path to the project folder*/
+	$path = "/DominicMAwesomenauts/php"; /*stores the path to the project folder*/
 	$host = "localhost";
 	$username = "root";
 	$password = "root";

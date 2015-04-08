@@ -16,8 +16,7 @@ game.GameTimerManager = Object.extend({
 	},
 	goldTimerCheck: function() {
 		if(Math.round(this.now/1000)%20 === 0 && (this.now - this.lastCreep >= 1000)) { /*on a timer every 20 seconds*/
-			game.data.gold += (game.data.exp1 + 1); /*add one to gold counter*/
-			console.log("Current Glod: " + game.data.gold); /*and print the current cold to the console*/
+			game.data.gold += (10 + 1); /*add one to gold counter*/
 		}
 	},
 
