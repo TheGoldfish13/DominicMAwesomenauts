@@ -21,8 +21,10 @@ game.SpearThrow = me.Entity.extend({
 	update: function(delta){
 		if(this.facing==="left"){
 			this.body.vel.x -= this.body.accel.x * me.timer.tick;
-		}else(this.facing==="right"){
+			this.flipX(true);
+		}else if(this.facing==="right"){
 			this.body.vel.x += this.body.accel.x * me.timer.tick;
+			this.flipX(false);
 		}
 		me.collision.check(this, true, this.collideHandler.bind(this), true);
 
@@ -33,9 +35,9 @@ game.SpearThrow = me.Entity.extend({
 		return true;
 	},
 
-	collideHandler: function(){
-		if (response.b.type ==='EnemyBase' || response.b.type ==='EnemyCreep'){
-			response.b.loseHealth(this.attack);
+	collideHandler: function(response){
+		if(response.b.type ==='EnemyBaseEntity' || response.b.type ==='EnemyCreep'){
+			response.b.loseHealth(1);
 			me.game.world.removeChild(this);
 		}
 	}
